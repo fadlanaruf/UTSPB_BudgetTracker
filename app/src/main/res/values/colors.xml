@@ -1,0 +1,31 @@
+<resources>
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="gray">#808080</color>
+    <color name="primary">#6200EE</color>
+    <color name="purple_200">#D0BCFF</color>
+    <color name="purple_500">#6750A4</color>
+    <color name="purple_700">#4F378B</color>
+    <color name="teal_200">#66FFF9</color>
+    <color name="teal_700">#00B4A0</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="background_color_light">#FFFFFF</color>
+    <color name="text_primary_light">#1C1B1F</color>
+    <color name="text_secondary_light">#605D64</color>
+    <color name="button_primary_light">#6750A4</color>
+    <color name="button_secondary_light">#E8DEF8</color>
+    <color name="bg_surface">#F6F8FA</color>
+
+    <color name="background_color_dark">#121212</color>
+    <color name="text_primary_dark">#E6E1E5</color>
+    <color name="text_secondary_dark">#CAC4D0</color>
+    <color name="button_primary_dark">#D0BCFF</color>
+    <color name="button_secondary_dark">#2B2930</color>
+
+
+    <color name="light_background_color">#FFFFFF</color>
+    <color name="light_text_primary">#212121</color>
+    <color name="light_text_secondary">#757575</color>
+
+</resources>

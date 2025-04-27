@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">BudgetTracker</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="welcome_user">Selamat datang, Pengguna!</string>
+    <string name="total_pemasukan">Total Pemasukan</string>
+    <string name="total_pengeluaran">Total Pengeluaran</string>
+    <string name="saldo_tersedia">Saldo Tersedia</string>
+    <string name="transaksi_terbaru">Transaksi Terbaru</string>
+    <string name="add_transaction">Tambah Transaksi</string>
+
+
+    <string name="about_app">Tentang Aplikasi</string>
+    <string name="settings_title">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="change_avatar">Change Avatar</string>
+    <string name="logout">Logout</string>
+    <string name="cd_add_transaction">Tambah transaksi</string>
+
+    <string-array name="transaction_categories">
+        <item>Semua</item>
+        <item>Makanan</item>
+        <item>Transportasi</item>
+        <item>Belanja</item>
+        <item>Hiburan</item>
+        <item>Tagihan</item>
+        <item>Pendidikan</item>
+        <item>Kesehatan</item>
+        <item>Lainnya</item>
+    </string-array>
+</resources>
