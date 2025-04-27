@@ -20,6 +20,14 @@
 
 ---
 
+## Video Demo
+
+
+https://github.com/user-attachments/assets/55ce89c7-9af0-4024-9f21-7c1d6c4a447a
+
+
+---
+
 ## Fitur Utama
 
 - Melacak pemasukan dan pengeluaran harian.
