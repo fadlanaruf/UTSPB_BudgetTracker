@@ -1,4 +1,4 @@
-package com.example.budgettracker.data.adapter;
+package com.example.budgettracker.data.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +60,11 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.Wishli
         void bind(final WishlistItem item, final OnItemClickListener listener) {
             tvItemName.setText(item.getName());
 
-            // Important: Remove the listener before setting the checked state
             checkBox.setOnCheckedChangeListener(null);
             checkBox.setChecked(item.isBought());
 
-            // Set listener for the whole item view
             itemView.setOnClickListener(v -> listener.onItemClick(item));
 
-            // Set listener for the checkbox to handle direct checkbox clicks
             checkBox.setOnClickListener(v -> listener.onItemClick(item));
         }
     }

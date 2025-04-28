@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.budgettracker.ui.auth.LoginActivity;
 import com.example.budgettracker.R;
+import com.example.budgettracker.ui.activities.AccountSettingsActivity;
+import com.example.budgettracker.ui.activities.InfoActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsFragment extends Fragment {
@@ -24,6 +26,7 @@ public class SettingsFragment extends Fragment {
     private SharedPreferences preferences;
     private static final String PREF_NAME = "settings_pref";
     private static final String KEY_THEME = "dark_mode";
+    private boolean isThemeChanging = false;
 
     public SettingsFragment() {}
 
@@ -39,27 +42,61 @@ public class SettingsFragment extends Fragment {
 
         preferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
-        boolean isDark = preferences.getBoolean(KEY_THEME, false);
+        int currentNightMode = AppCompatDelegate.getDefaultNightMode();
+        boolean isDark = currentNightMode == AppCompatDelegate.MODE_NIGHT_YES;
+
+        if (preferences.getBoolean(KEY_THEME, false) != isDark) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(KEY_THEME, isDark);
+            editor.apply();
+        }
+
         themeSwitch.setChecked(isDark);
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(KEY_THEME, isChecked);
-            editor.apply();
+            if (buttonView.isPressed()) { // Only respond to user input, not programmatic changes
+                isThemeChanging = true;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(KEY_THEME, isChecked);
+                editor.apply();
 
-            AppCompatDelegate.setDefaultNightMode(
-                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
-            );
+                SharedPreferences navPref = requireActivity().getSharedPreferences("nav_pref", Context.MODE_PRIVATE);
+                navPref.edit().putString("last_fragment", "settings").apply();
+
+                AppCompatDelegate.setDefaultNightMode(
+                        isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+                );
+            }
         });
 
         logoutBtn.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Logout berhasil", Toast.LENGTH_SHORT).show();
-
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getContext(), LoginActivity.class));
             requireActivity().finish();
         });
 
+        view.findViewById(R.id.account_settings).setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), AccountSettingsActivity.class);
+            startActivity(intent);
+        });
+
+        view.findViewById(R.id.help_section).setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), InfoActivity.class);
+            startActivity(intent);
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isThemeChanging) {
+            isThemeChanging = false;
+            int currentNightMode = AppCompatDelegate.getDefaultNightMode();
+            boolean isDark = currentNightMode == AppCompatDelegate.MODE_NIGHT_YES;
+            themeSwitch.setChecked(isDark);
+        }
     }
 }

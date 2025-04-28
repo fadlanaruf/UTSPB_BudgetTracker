@@ -30,25 +30,32 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        // Auto-login if user is already signed in
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
+            navigateToMainActivity();
+            return;
         }
 
+        initializeViews();
+        setupClickListeners();
+    }
+
+    private void initializeViews() {
         emailEditText = findViewById(R.id.email_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
         registerButton = findViewById(R.id.register_button);
         forgotPasswordTextView = findViewById(R.id.forgot_password_text);
         progressBar = findViewById(R.id.progress_bar);
+    }
 
+    private void setupClickListeners() {
         loginButton.setOnClickListener(v -> loginUser());
 
         registerButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
         forgotPasswordTextView.setOnClickListener(v -> resetPassword());
@@ -58,31 +65,38 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
+        if (!validateInputs(email, password)) {
+            return;
+        }
+
+        showLoading(true);
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    showLoading(false);
+                    if (task.isSuccessful()) {
+                        showToast("Login berhasil");
+                        navigateToMainActivity();
+                    } else {
+                        showToast("Login gagal: " + task.getException().getMessage());
+                    }
+                });
+    }
+
+    private boolean validateInputs(String email, String password) {
         if (email.isEmpty()) {
             emailEditText.setError("Email harus diisi");
             emailEditText.requestFocus();
-            return;
+            return false;
         }
 
         if (password.isEmpty()) {
             passwordEditText.setError("Password harus diisi");
             passwordEditText.requestFocus();
-            return;
+            return false;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    progressBar.setVisibility(View.GONE);
-                    if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Login berhasil", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Login gagal: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        return true;
     }
 
     private void resetPassword() {
@@ -94,16 +108,34 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        showLoading(true);
 
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
-                    progressBar.setVisibility(View.GONE);
+                    showLoading(false);
                     if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Link reset password dikirim ke email Anda", Toast.LENGTH_SHORT).show();
+                        showToast("Link reset password dikirim ke email Anda");
                     } else {
-                        Toast.makeText(LoginActivity.this, "Gagal mengirim email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        showToast("Gagal mengirim email: " + task.getException().getMessage());
                     }
                 });
+    }
+
+    private void navigateToMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    private void showLoading(boolean isLoading) {
+        progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        loginButton.setEnabled(!isLoading);
+        registerButton.setEnabled(!isLoading);
+        forgotPasswordTextView.setEnabled(!isLoading);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

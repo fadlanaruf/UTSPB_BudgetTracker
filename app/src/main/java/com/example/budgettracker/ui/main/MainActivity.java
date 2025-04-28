@@ -11,6 +11,7 @@ import com.example.budgettracker.ui.auth.LoginActivity;
 import com.example.budgettracker.ui.fragments.HomeFragment;
 import com.example.budgettracker.ui.fragments.SettingsFragment;
 import com.example.budgettracker.ui.fragments.TransactionsFragment;
+import com.example.budgettracker.ui.fragments.WishlistFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new HomeFragment();
             } else if (itemId == R.id.navigation_transactions) {
                 selectedFragment = new TransactionsFragment();
+            } else if (itemId == R.id.navigation_wishlist) {
+                selectedFragment = new WishlistFragment();
             } else if (itemId == R.id.navigation_settings) {
                 selectedFragment = new SettingsFragment();
             }

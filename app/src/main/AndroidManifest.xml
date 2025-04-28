@@ -32,7 +32,17 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.transactions.AddTransactionsActivity" />
+            android:name=".ui.transactions.AddTransactionsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.activities.AccountSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.BudgetTracker.NoActionBar" />
+
+        <activity
+            android:name=".ui.activities.InfoActivity"
+            android:exported="false" />
 
 
     </application>

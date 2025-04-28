@@ -9,13 +9,18 @@
     <string name="saldo_tersedia">Saldo Tersedia</string>
     <string name="transaksi_terbaru">Transaksi Terbaru</string>
     <string name="add_transaction">Tambah Transaksi</string>
+    <string name="loading_transactions">Memuat transaksi...</string>
+    <string name="search_icon_desc">Ikon pencarian</string>
+    <string name="category_spinner_desc">Pilih kategori transaksi</string>
+    <string name="add_transaction_desc">Tambah transaksi baru</string>
+    <string name="empty_state_desc">Tidak ada transaksi</string>
+    <string name="no_transactions_found">Belum ada transaksi</string>
+    <string name="no_matching_transactions">Tidak ada transaksi yang sesuai</string>
+    <plurals name="search_results_count">
+        <item quantity="one">%d hasil</item>
+        <item quantity="other">%d hasil</item>
+    </plurals>
 
-
-    <string name="about_app">Tentang Aplikasi</string>
-    <string name="settings_title">Settings</string>
-    <string name="dark_mode">Dark Mode</string>
-    <string name="change_avatar">Change Avatar</string>
-    <string name="logout">Logout</string>
     <string name="cd_add_transaction">Tambah transaksi</string>
 
     <string-array name="transaction_categories">

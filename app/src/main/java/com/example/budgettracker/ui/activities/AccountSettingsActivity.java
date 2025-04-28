@@ -1,4 +1,4 @@
-package com.example.budgettracker.ui.fragments;
+package com.example.budgettracker.ui.activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -38,11 +38,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
 
-        // Initialize Firebase Auth and Firestore
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -50,7 +48,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Pengaturan Akun");
         }
 
-        // Initialize views
         nameEdit = findViewById(R.id.et_name);
         emailEdit = findViewById(R.id.et_email);
         phoneEdit = findViewById(R.id.et_phone);
@@ -61,41 +58,33 @@ public class AccountSettingsActivity extends AppCompatActivity {
         changePasswordButton = findViewById(R.id.btn_change_password);
         progressBar = findViewById(R.id.progress_bar);
 
-        // Load user data
         loadUserData();
 
-        // Setup click listeners
         saveButton.setOnClickListener(v -> saveUserData());
         changePasswordButton.setOnClickListener(v -> sendPasswordResetEmail());
 
-        // Profile picture click listener
         ImageView profilePic = findViewById(R.id.iv_profile);
         profilePic.setOnClickListener(v -> {
             Toast.makeText(this, "Fitur ubah foto profil akan segera hadir", Toast.LENGTH_SHORT).show();
         });
     }
-
     private void loadUserData() {
         progressBar.setVisibility(View.VISIBLE);
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
-            // Set email (can't be changed in Firebase without re-authentication)
             emailEdit.setText(user.getEmail());
             emailEdit.setEnabled(false);
 
-            // Set display name
             if (user.getDisplayName() != null) {
                 nameEdit.setText(user.getDisplayName());
             }
 
-            // Get additional user data from Firestore
             firestore.collection("users").document(user.getUid())
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         progressBar.setVisibility(View.GONE);
                         if (documentSnapshot.exists()) {
-                            // Get phone number if exists
                             String phone = documentSnapshot.getString("phone");
                             if (phone != null) {
                                 phoneEdit.setText(phone);
@@ -105,12 +94,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(AccountSettingsActivity.this,
-                                "Gagal memuat data: " + e.getMessage(),
+                                "Fitur akan segera hadir" + e.getMessage(),
                                 Toast.LENGTH_SHORT).show();
                     });
         } else {
             progressBar.setVisibility(View.GONE);
-            finish(); // If no user, close activity
+            finish();
         }
     }
 
@@ -118,7 +107,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         String name = nameEdit.getText().toString().trim();
         String phone = phoneEdit.getText().toString().trim();
 
-        // Validate inputs
         boolean isValid = true;
 
         if (name.isEmpty()) {
@@ -141,14 +129,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
-            // Update display name in Firebase Auth
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(name)
                     .build();
 
             user.updateProfile(profileUpdates)
                     .addOnSuccessListener(aVoid -> {
-                        // Update additional info in Firestore
                         DocumentReference userRef = firestore.collection("users").document(user.getUid());
 
                         Map<String, Object> updates = new HashMap<>();
@@ -165,7 +151,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(AccountSettingsActivity.this,
-                                            "Gagal memperbarui data: " + e.getMessage(),
+                                            "Fitur akan segera hadir" + e.getMessage(),
                                             Toast.LENGTH_SHORT).show();
                                 });
                     })
