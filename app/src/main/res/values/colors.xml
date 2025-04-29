@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
@@ -16,16 +17,30 @@
     <color name="button_primary_light">#6750A4</color>
     <color name="button_secondary_light">#E8DEF8</color>
     <color name="bg_surface">#F6F8FA</color>
-
+    <color name="blue_500">#2196F3</color>
+    <color name="gray_200">#EEEEEE</color>
+    <color name="gray_500">#9E9E9E</color>
+    <color name="green_600">#43A047</color>
+    <color name="red_600">#E53935</color>
     <color name="background_color_dark">#121212</color>
     <color name="text_primary_dark">#E6E1E5</color>
     <color name="text_secondary_dark">#CAC4D0</color>
     <color name="button_primary_dark">#D0BCFF</color>
     <color name="button_secondary_dark">#2B2930</color>
 
-
     <color name="light_background_color">#FFFFFF</color>
     <color name="light_text_primary">#212121</color>
     <color name="light_text_secondary">#757575</color>
+    <color name="surface_variant">#F3F1F8</color>
 
+    <color name="background_light">#F8F9FA</color>
+    <color name="text_primary">#212529</color>
+    <color name="text_secondary">#6C757D</color>
+    <color name="text_tertiary">#ADB5BD</color>
+    <color name="text_on_dark">#FFFFFF</color>
+    <color name="income_color">#CC4CAF50</color>
+    <color name="expense_color">#CCF44336</color>
+    <color name="accent">#3D5AFE</color>
+    <color name="card_start">#4F378B</color>
+    <color name="card_end">#6750A4</color>
 </resources>

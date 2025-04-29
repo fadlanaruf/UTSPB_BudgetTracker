@@ -27,23 +27,16 @@ public class FirebaseHelper {
         return user != null ? user.getUid() : null;
     }
 
-    // Add a new transaction
     public Task<DocumentReference> addTransaksi(Transactions transaksi) {
         transaksi.setUserId(getCurrentUserId());
         return db.collection("transaksi").add(transaksi);
     }
 
-    // Update an existing transaction
-    public Task<Void> updateTransaksi(Transactions transaksi) {
-        return db.collection("transaksi").document(transaksi.getId()).set(transaksi);
-    }
-
-    // Delete a transaction
     public Task<Void> deleteTransaksi(String transaksiId) {
-        return db.collection("transaksi").document(transaksiId).delete();
+        return db.collection("transaksi")
+                .document(transaksiId).delete();
     }
 
-    // Get all transactions for current user
     public Task<QuerySnapshot> getAllTransaksi() {
         return db.collection("transaksi")
                 .whereEqualTo("userId", getCurrentUserId())
@@ -51,7 +44,6 @@ public class FirebaseHelper {
                 .get();
     }
 
-    // Get recent transactions for current user (limited to specific count)
     public Task<QuerySnapshot> getRecentTransaksi(int limit) {
         return db.collection("transaksi")
                 .whereEqualTo("userId", getCurrentUserId())
@@ -60,7 +52,6 @@ public class FirebaseHelper {
                 .get();
     }
 
-    // Get income transactions
     public Task<QuerySnapshot> getPemasukan() {
         return db.collection("transaksi")
                 .whereEqualTo("userId", getCurrentUserId())
@@ -68,7 +59,6 @@ public class FirebaseHelper {
                 .get();
     }
 
-    // Get expense transactions
     public Task<QuerySnapshot> getPengeluaran() {
         return db.collection("transaksi")
                 .whereEqualTo("userId", getCurrentUserId())
@@ -76,7 +66,6 @@ public class FirebaseHelper {
                 .get();
     }
 
-    // Sign out the current user
     public void signOut() {
         mAuth.signOut();
     }

@@ -1,4 +1,4 @@
-    package com.example.budgettracker.ui.fragments;
+    package com.example.budgettracker.ui.activities;
 
     import android.os.Bundle;
     import android.view.View;
@@ -31,7 +31,6 @@
             setupInfoItems();
             setupRecyclerView();
 
-            // Animation for entry
             View rootView = findViewById(R.id.info_container);
             rootView.setAlpha(0f);
             rootView.animate().alpha(1f).setDuration(300).start();
@@ -40,7 +39,6 @@
         private void setupInfoItems() {
             infoItems = new ArrayList<>();
 
-            // Add all info items
             infoItems.add(new InfoItem(
                     "Mengelola Keuangan",
                     "Aplikasi Budget Tracker membantu Anda melacak pemasukan dan pengeluaran dengan mudah. Lihat saldo, analisis pengeluaran, dan kelola keuangan Anda secara efisien.",

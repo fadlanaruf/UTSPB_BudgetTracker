@@ -1,4 +1,4 @@
-package com.example.budgettracker.data.adapter;
+package com.example.budgettracker.data.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,10 +82,10 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             String formattedAmount = currencyFormat.format(transaction.getJumlah());
 
             if ("pemasukan".equals(transaction.getTipe())) {
-                tvJumlah.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
+                tvJumlah.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.green_600));
                 tvJumlah.setText("+ " + formattedAmount);
             } else {
-                tvJumlah.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.purple_500));
+                tvJumlah.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.red_600));
                 tvJumlah.setText("- " + formattedAmount);
             }
 

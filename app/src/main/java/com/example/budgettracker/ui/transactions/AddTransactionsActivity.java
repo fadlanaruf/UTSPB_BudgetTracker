@@ -1,6 +1,7 @@
 package com.example.budgettracker.ui.transactions;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.budgettracker.R;
@@ -44,8 +46,10 @@ public class AddTransactionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transactions);
 
+        // Initialize Firebase Helper
         firebaseHelper = new FirebaseHelper();
 
+        // Initialize views
         etJumlah = findViewById(R.id.et_jumlah);
         etDeskripsi = findViewById(R.id.et_deskripsi);
         etTanggal = findViewById(R.id.et_tanggal);
@@ -56,8 +60,9 @@ public class AddTransactionsActivity extends AppCompatActivity {
         btnSimpan = findViewById(R.id.btn_simpan);
         btnBatal = findViewById(R.id.btn_batal);
 
-        setupKategoriLists();
+        etJumlah.requestFocus();
 
+        setupKategoriLists();
         updateDateLabel();
 
         etTanggal.setOnClickListener(v -> {
@@ -76,6 +81,8 @@ public class AddTransactionsActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
+        setupKategoriSpinner(kategoriPemasukan);
+
         rgTipe.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rb_pemasukan) {
                 setupKategoriSpinner(kategoriPemasukan);
@@ -84,8 +91,6 @@ public class AddTransactionsActivity extends AppCompatActivity {
             }
         });
 
-        setupKategoriSpinner(kategoriPemasukan);
-
         spinnerKategori.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -93,12 +98,10 @@ public class AddTransactionsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                selectedKategori = parent.getItemAtPosition(0).toString();
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        btnSimpan.setOnClickListener(v -> saveTransactions() );
+        btnSimpan.setOnClickListener(v -> saveTransactions());
         btnBatal.setOnClickListener(v -> finish());
     }
 
@@ -126,6 +129,7 @@ public class AddTransactionsActivity extends AppCompatActivity {
                 this, android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerKategori.setAdapter(adapter);
+        selectedKategori = items.get(0);
     }
 
     private void updateDateLabel() {
@@ -134,21 +138,35 @@ public class AddTransactionsActivity extends AppCompatActivity {
     }
 
     private void saveTransactions() {
-        // Validate input
-        if (etJumlah.getText().toString().trim().isEmpty()) {
+        String jumlahText = etJumlah.getText().toString().trim();
+        String deskripsi = etDeskripsi.getText().toString().trim();
+        String tanggalText = etTanggal.getText().toString().trim();
+
+        if (jumlahText.isEmpty()) {
             etJumlah.setError("Jumlah harus diisi");
             return;
         }
 
-        if (etDeskripsi.getText().toString().trim().isEmpty()) {
+        double jumlah;
+        try {
+            jumlah = Double.parseDouble(jumlahText);
+        } catch (NumberFormatException e) {
+            etJumlah.setError("Jumlah tidak valid");
+            return;
+        }
+
+        if (deskripsi.isEmpty()) {
             etDeskripsi.setError("Deskripsi harus diisi");
             return;
         }
 
-        double jumlah = Double.parseDouble(etJumlah.getText().toString().trim());
-        String deskripsi = etDeskripsi.getText().toString().trim();
-        Date tanggal = selectedDate.getTime();
+        if (tanggalText.isEmpty()) {
+            etTanggal.setError("Tanggal harus diisi");
+            return;
+        }
+
         String tipe = rbPemasukan.isChecked() ? "pemasukan" : "pengeluaran";
+        Date tanggal = selectedDate.getTime();
 
         Transactions transactions = new Transactions(
                 firebaseHelper.getCurrentUserId(),
@@ -161,11 +179,30 @@ public class AddTransactionsActivity extends AppCompatActivity {
 
         firebaseHelper.addTransaksi(transactions)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(AddTransactionsActivity.this, "Transaksi berhasil disimpan", Toast.LENGTH_SHORT).show();
-                    finish();
+                    showSuccessDialog();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(AddTransactionsActivity.this, "Gagal menyimpan transaksi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Gagal menyimpan transaksi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void showSuccessDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Berhasil!")
+                .setMessage("Transaksi berhasil disimpan. Tambah lagi?")
+                .setPositiveButton("Ya", (dialog, which) -> resetForm())
+                .setNegativeButton("Tidak", (dialog, which) -> finish())
+                .setCancelable(false)
+                .show();
+    }
+
+    private void resetForm() {
+        etJumlah.setText("");
+        etDeskripsi.setText("");
+        selectedDate = Calendar.getInstance();
+        updateDateLabel();
+        spinnerKategori.setSelection(0);
+        rgTipe.check(R.id.rb_pemasukan);
+        etJumlah.requestFocus();
     }
 }

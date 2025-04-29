@@ -10,10 +10,9 @@ public class Transactions {
     private double jumlah;
     private String deskripsi;
     private String kategori;
-    private String tipe; // "pemasukan" or "pengeluaran"
+    private String tipe;
     private Date tanggal;
 
-    // Empty constructor required for Firestore
     public Transactions() {
     }
 

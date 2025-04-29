@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "341066197565",
     "project_id": "budgettracker-9ec18",
+    "firebase_url": "https://budgettracker-9ec18-default-rtdb.firebaseio.com",
     "storage_bucket": "budgettracker-9ec18.firebasestorage.app"
   },
   "client": [
